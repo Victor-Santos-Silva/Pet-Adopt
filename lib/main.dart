@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adopt/view/dashboard_screen.dart';
+import 'package:pet_adopt/widgets/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,13 +11,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Ola mundo",
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return UserProvider(
+      child: MaterialApp(
+        title: "Pet Adopt",
+        home: Dashboard(),
       ),
-      home: Dashboard(),
     );
   }
 }
