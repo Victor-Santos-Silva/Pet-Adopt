@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adopt/widgets/background_widget.dart';
-import 'package:pet_adopt/widgets/form_login_widget.dart';
+import 'package:pet_adopt/widgets/form_cadastro_widget.dart';
 
-class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+class CadastroView extends StatelessWidget {
+  const CadastroView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class LoginView extends StatelessWidget {
         children: [
           const BackgroundWidget(imagePath: "assets/images/Background 1.png"),
           Center(
-            child: FormLoginWidget(),
+            child: FormCadastroWidget(),
           ),
         ],
       ),
