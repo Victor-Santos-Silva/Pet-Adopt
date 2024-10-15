@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_adopt/view/dashboard_screen.dart';
-import 'package:pet_adopt/widgets/provider.dart';
+import 'package:pet_adopt/view/login.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,11 +10,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UserProvider(
-      child: MaterialApp(
-        title: "Pet Adopt",
-        home: Dashboard(),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Login(),
     );
   }
 }
