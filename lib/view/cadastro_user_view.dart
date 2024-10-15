@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adopt/widgets/background_widget.dart';
-import 'package:pet_adopt/widgets/form_cadastro_widget.dart';
+import 'package:pet_adopt/widgets/form_cadastro_user_widget.dart';
 
 class CadastroView extends StatelessWidget {
   const CadastroView({super.key});
