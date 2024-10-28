@@ -9,7 +9,7 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          BackgroundWidget(
+          const BackgroundWidget(
             imagePath: "assets/images/wallpaper.jpg",
           ),
           Container(
@@ -19,8 +19,8 @@ class HomeView extends StatelessWidget {
           Row(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 50, left: 50),
-                child: Text(
+                margin: const EdgeInsets.only(top: 50, left: 50),
+                child: const Text(
                   "Pet Adopt",
                   style: TextStyle(
                     color: Colors.white,

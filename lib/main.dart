@@ -6,7 +6,7 @@ import 'package:pet_adopt/view/cadastro_pet_view.dart'; // Cadastro de pet
 import 'package:pet_adopt/view/favorito_view.dart'; // Tela de Favorito
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomeView(),
     );
