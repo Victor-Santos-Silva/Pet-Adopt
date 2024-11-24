@@ -1,42 +1,64 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:pet_adopt/widgets/background_widget.dart';
+import 'package:http/http.dart' as http;
+import 'package:pet_adopt/widgets/card_widget.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  Future<List<dynamic>> fetchPets() async {
+    try {
+      final response = await http.get(
+        Uri.parse('https://pet-adopt-dq32j.ondigitalocean.app/pet/pets'),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body) as List<dynamic>;
+      } else {
+        throw Exception('Falha ao carregar pets');
+      }
+    } catch (e) {
+      throw Exception('Erro: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          const BackgroundWidget(
-            imagePath: "assets/images/wallpaper.jpg",
-          ),
-          Container(
-            color: Colors.green,
-            height: 150,
-          ),
-          Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 50, left: 50),
-                child: const Text(
-                  "Pet Adopt",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+      appBar: AppBar(
+        title: const Text("Pet Adopt"),
+      ),
+      body: FutureBuilder<List<dynamic>>(
+        future: fetchPets(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Erro: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Nenhum pet encontrado'));
+          } else {
+            final pets = snapshot.data!;
+            return GridView.builder(
+              padding: const EdgeInsets.all(8.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
               ),
-              Container(
-                margin: EdgeInsets.only(top: 60, left: 100),
-                width: 80,
-                child: Image.asset('assets/images/foto de perfil.png'),
-              ),
-            ],
-          ),
-        ],
+              itemCount: pets.length,
+              itemBuilder: (context, index) {
+                final pet = pets[index];
+                return CardWidget(pet: pet);
+              },
+            );
+          }
+        },
       ),
     );
   }

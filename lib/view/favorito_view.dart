@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:pet_adopt/widgets/background_widget.dart';
 import 'package:pet_adopt/widgets/card_widget.dart';
 
@@ -84,3 +84,4 @@ class FavoritoView extends StatelessWidget {
     );
   }
 }
+ */

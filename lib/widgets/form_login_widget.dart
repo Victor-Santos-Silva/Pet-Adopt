@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:pet_adopt/Controller/auth_controller.dart';
 
 class FormLoginWidget extends StatelessWidget {
+  // Controladores para capturar os textos dos campos de entrada
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +22,7 @@ class FormLoginWidget extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             TextFormField(
+              controller: emailController, // Conectado ao controlador
               decoration: const InputDecoration(labelText: 'Usuário'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -28,6 +32,7 @@ class FormLoginWidget extends StatelessWidget {
               },
             ),
             TextFormField(
+              controller: passwordController, // Conectado ao controlador
               decoration: const InputDecoration(labelText: 'Senha'),
               obscureText: true,
               validator: (value) {
@@ -39,7 +44,21 @@ class FormLoginWidget extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {  },
+              onPressed: () {
+                // Captura os valores dos controladores e chama o método de login
+                final email = emailController.text;
+                final password = passwordController.text;
+
+                // Verifica se os campos não estão vazios
+                if (email.isEmpty || password.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Preencha todos os campos!')),
+                  );
+                } else {
+                  // Chama o controlador para realizar o login
+                  AuthController().loginUser(email, password, context);
+                }
+              },
               child: const Text('Entrar'),
             ),
           ],
