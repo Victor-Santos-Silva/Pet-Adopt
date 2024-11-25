@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pet_adopt/widgets/card_widget.dart';
+import 'package:pet_adopt/models/user.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final User user;
+
+  const HomeView({required this.user, Key? key}) : super(key: key);
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -31,7 +34,8 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pet Adopt"),
+        title:
+            Text("Bem-vindo, ${widget.user.name}!"), // Mostra o nome do usuário
       ),
       body: FutureBuilder<List<dynamic>>(
         future: fetchPets(),
