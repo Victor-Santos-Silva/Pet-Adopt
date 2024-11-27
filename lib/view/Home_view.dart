@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:pet_adopt/models/Pet.dart'; // Certifique-se de que o model está corretamente implementado e importado.
+import 'package:pet_adopt/models/Pet.dart';
+import 'package:pet_adopt/widgets/Card_widget.dart'; // Certifique-se de que o model está corretamente implementado e importado.
 
 class HomeView extends StatefulWidget {
   @override
@@ -74,23 +75,7 @@ class _HomeViewState extends State<HomeView> {
                   itemCount: pets.length,
                   itemBuilder: (context, index) {
                     final pet = pets[index];
-                    return Card(
-                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      child: ListTile(
-                        leading: pet.images.isNotEmpty
-                            ? Image.network(
-                                pet.images[0], // Mostra a primeira imagem
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                              )
-                            : Icon(Icons.pets, size: 50),
-                        title: Text(pet.name), // Nome do pet
-                        subtitle: Text(
-                            'Idade: ${pet.age} anos\nCor: ${pet.color}'), // Outras informações do pet
-                        trailing: Text('Peso: ${pet.weight} kg'),
-                      ),
-                    );
+                    return Card_widget(pet: pet);
                   },
                 ),
     );

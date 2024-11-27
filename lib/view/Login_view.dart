@@ -43,7 +43,8 @@ class _LoginViewState extends State<LoginView> {
           // Exibe mensagem de sucesso e navega para outra tela
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text('Login bem-sucedido! Token: ${data['token']}')),
+              content: Text('Login bem-sucedido!'),
+            ),
           );
 
           // Substitua por sua lógica de navegação
