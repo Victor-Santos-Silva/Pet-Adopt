@@ -18,7 +18,7 @@ class _HomeViewState extends State<HomeView> {
     fetchPets(); // Chama a API ao iniciar a tela
   }
 
-  // Método para consumir a API 
+  // Método para consumir a API
   Future<void> fetchPets() async {
     try {
       final url = Uri.parse('https://pet-adopt-dq32j.ondigitalocean.app/pet/pets');
