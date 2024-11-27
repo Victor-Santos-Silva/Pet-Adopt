@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pet_adopt/view/cadastro_user_view.dart'; // Cadastro de usuario
-import 'package:pet_adopt/view/login_view.dart'; // Login de Usuario
-import 'package:pet_adopt/view/Home_view.dart'; //Tela Home
-import 'package:pet_adopt/view/cadastro_pet_view.dart'; // Cadastro de pet
-import 'package:pet_adopt/view/favorito_view.dart'; // Tela de Favorito
+import 'package:pet_adopt/view/Home_view.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -14,9 +11,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginView(),
+      home: HomeView(),
     );
   }
 }

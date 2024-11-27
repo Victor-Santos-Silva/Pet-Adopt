@@ -1,32 +1,43 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:pet_adopt/widgets/card_widget.dart';
-import 'package:pet_adopt/models/user.dart';
 
 class HomeView extends StatefulWidget {
-  final User user;
-
-  const HomeView({required this.user, Key? key}) : super(key: key);
-
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
-  Future<List<dynamic>> fetchPets() async {
+  // Lista de pets
+  List<dynamic> pets = [];
+  bool isLoading = true; // Indicador de carregamento
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPets(); // Chama a API ao iniciar a tela
+  }
+
+  // Método para consumir a API
+  Future<void> fetchPets() async {
     try {
-      final response = await http.get(
-        Uri.parse('https://pet-adopt-dq32j.ondigitalocean.app/pet/pets'),
-      );
+      final url = Uri.parse('https://pet-adopt-dq32j.ondigitalocean.app/pet/pets');
+      final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body) as List<dynamic>;
+        final data = jsonDecode(response.body);
+        setState(() {
+          pets = data; // Atualiza a lista de pets
+          isLoading = false;
+        });
       } else {
-        throw Exception('Falha ao carregar pets');
+        throw Exception('Erro ao buscar os dados da API');
       }
     } catch (e) {
-      throw Exception('Erro: $e');
+      setState(() {
+        isLoading = false;
+      });
+      print('Erro: $e');
     }
   }
 
@@ -34,36 +45,20 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text("Bem-vindo, ${widget.user.name}!"), // Mostra o nome do usuário
+        title: Text("Bem-vindo!"),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: fetchPets(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Nenhum pet encontrado'));
-          } else {
-            final pets = snapshot.data!;
-            return GridView.builder(
-              padding: const EdgeInsets.all(8.0),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-              ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator()) // Mostra o carregamento
+          : ListView.builder(
               itemCount: pets.length,
               itemBuilder: (context, index) {
                 final pet = pets[index];
-                return CardWidget(pet: pet);
+                return ListTile(
+                  title: Text(pet['name'] ?? 'Sem nome'), // Nome do pet
+                  subtitle: Text(pet['type'] ?? 'Sem tipo'), // Tipo do pet
+                );
               },
-            );
-          }
-        },
-      ),
+            ),
     );
   }
 }
