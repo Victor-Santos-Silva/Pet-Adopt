@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const LoginView(), // Tela de Login
         '/home': (context) => HomeView(), // Tela de Home
-        '/register': (context) => const CadastroUserView(), // Tela de Cadastro de Usuário
+        '/register': (context) =>
+            const CadastroUserView(), // Tela de Cadastro de Usuário
       },
     );
   }

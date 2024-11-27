@@ -21,7 +21,8 @@ class _HomeViewState extends State<HomeView> {
   // Método para consumir a API
   Future<void> fetchPets() async {
     try {
-      final url = Uri.parse('https://pet-adopt-dq32j.ondigitalocean.app/pet/pets');
+      final url =
+          Uri.parse('https://pet-adopt-dq32j.ondigitalocean.app/pet/pets');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
