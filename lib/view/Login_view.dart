@@ -48,7 +48,7 @@ class _LoginViewState extends State<LoginView> {
           );
 
           // Substitua por sua lógica de navegação
-          Navigator.pushReplacementNamed(context, '/view/pet');
+          Navigator.pushReplacementNamed(context, '/home');
         } else {
           final error = jsonDecode(response.body);
           ScaffoldMessenger.of(context).showSnackBar(

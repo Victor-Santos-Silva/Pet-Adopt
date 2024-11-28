@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:pet_adopt/models/Pet.dart';
+import 'package:pet_adopt/controllers/home_controller.dart';
+import 'package:pet_adopt/view/Home_pet_view.dart';
 import 'package:pet_adopt/widgets/Card_widget.dart';
-
-import 'Cadastro_pet_view.dart'; // Certifique-se de que o model está corretamente implementado e importado.
+import 'Cadastro_pet_view.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -12,50 +10,17 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  // Lista de pets
-  List<Pet> pets = [];
-  bool isLoading = true; // Indicador de carregamento
+  final HomeController _controller = HomeController();
 
   @override
   void initState() {
     super.initState();
-    _fetchPets(); // Chama a API ao iniciar a tela
+    _loadPets(); // Inicializa o carregamento dos pets
   }
 
-  Future<void> _fetchPets() async {
-    const apiUrl = 'https://pet-adopt-dq32j.ondigitalocean.app/pet/pets';
-
-    try {
-      final response = await http.get(Uri.parse(apiUrl));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-
-        // Ajuste aqui para acessar a chave correta
-        if (data['pets'] != null && data['pets'] is List) {
-          setState(() {
-            pets = (data['pets'] as List)
-                .map((json) => Pet.fromJson(json))
-                .toList();
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            pets = [];
-            isLoading = false;
-          });
-          print('Erro: Nenhuma lista encontrada na chave "pets".');
-        }
-      } else {
-        throw Exception(
-            'Erro ao buscar os dados da API: ${response.statusCode}');
-      }
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      print('Erro ao carregar pets: $e');
-    }
+  Future<void> _loadPets() async {
+    await _controller.fetchPets();
+    setState(() {}); // Atualiza a UI após carregar os dados
   }
 
   @override
@@ -64,22 +29,37 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         title: Text("Bem-vindo!"),
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator()) // Mostra o carregamento
-          : pets.isEmpty
+      body: Column(
+        children: [
+          _controller.isLoading
               ? Center(
-                  child: Text(
-                    'Nenhum pet encontrado!',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: pets.length,
-                  itemBuilder: (context, index) {
-                    final pet = pets[index];
-                    return Card_widget(pet: pet);
-                  },
-                ),
+                  child: CircularProgressIndicator()) // Mostra o carregamento
+              : _controller.pets.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Nenhum pet encontrado!',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: _controller.pets.length,
+                      itemBuilder: (context, index) {
+                        final pet = _controller.pets[index];
+                        return Card_widget(pet: pet);
+                      },
+                    ),
+          /* ElevatedButton(
+            onPressed: () {
+              // Navega para a página de cadastro de pet
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePetView()),
+              );
+            },
+            child: Text('Ir para Perfil'), // Exemplo
+          ), */
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navega para a página de cadastro de pet

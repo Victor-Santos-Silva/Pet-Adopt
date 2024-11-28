@@ -49,7 +49,8 @@ class _CadastroPetViewState extends State<CadastroPetView> {
           final data = jsonDecode(response.body);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text('Pet registrado com sucesso! ID: ${data['id']}')),
+              content: Text('Pet registrado com sucesso!'),
+            ),
           );
           Navigator.pushReplacementNamed(context, '/');
         } else {
