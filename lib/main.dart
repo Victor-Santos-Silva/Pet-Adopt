@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pet_adopt/view/Cadastro_pet_view.dart';
 import 'package:pet_adopt/view/Cadastro_user_view.dart';
+import 'package:pet_adopt/view/Home_pet_view.dart';
 import 'package:pet_adopt/view/Home_view.dart';
 import 'package:pet_adopt/view/Login_view.dart';
 
@@ -20,6 +22,10 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeView(), // Tela de Home
         '/register': (context) =>
             const CadastroUserView(), // Tela de Cadastro de Usuário
+        '/register/pet': (context) =>
+            const CadastroPetView(), // Tela de cadastro de pet
+        '/view/pet': (context) =>
+            HomePetView(), // tela de visualizacao de pets cadastrados
       },
     );
   }

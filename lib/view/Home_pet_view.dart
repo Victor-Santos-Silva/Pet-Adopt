@@ -6,12 +6,12 @@ import 'package:pet_adopt/widgets/Card_widget.dart';
 
 import 'Cadastro_pet_view.dart'; // Certifique-se de que o model está corretamente implementado e importado.
 
-class HomeView extends StatefulWidget {
+class HomePetView extends StatefulWidget {
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<HomePetView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomePetView> {
   // Lista de pets
   List<Pet> pets = [];
   bool isLoading = true; // Indicador de carregamento
@@ -23,7 +23,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> _fetchPets() async {
-    const apiUrl = 'https://pet-adopt-dq32j.ondigitalocean.app/pet/pets';
+    const apiUrl = 'https://pet-adopt-dq32j.ondigitalocean.app/pet/mypets';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
