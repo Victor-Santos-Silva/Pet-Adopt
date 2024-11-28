@@ -29,37 +29,22 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         title: Text("Bem-vindo!"),
       ),
-      body: Column(
-        children: [
-          _controller.isLoading
+      body: _controller.isLoading
+          ? Center(child: CircularProgressIndicator()) // Mostra o carregamento
+          : _controller.pets.isEmpty
               ? Center(
-                  child: CircularProgressIndicator()) // Mostra o carregamento
-              : _controller.pets.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Nenhum pet encontrado!',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: _controller.pets.length,
-                      itemBuilder: (context, index) {
-                        final pet = _controller.pets[index];
-                        return Card_widget(pet: pet);
-                      },
-                    ),
-          /* ElevatedButton(
-            onPressed: () {
-              // Navega para a página de cadastro de pet
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePetView()),
-              );
-            },
-            child: Text('Ir para Perfil'), // Exemplo
-          ), */
-        ],
-      ),
+                  child: Text(
+                    'Nenhum pet encontrado!',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: _controller.pets.length,
+                  itemBuilder: (context, index) {
+                    final pet = _controller.pets[index];
+                    return Card_widget(pet: pet);
+                  },
+                ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navega para a página de cadastro de pet
