@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert'; // Para manipulação de JSON
-import 'package:http/http.dart' as http; // Biblioteca HTTP
+import 'package:http/http.dart' as http;
+import 'package:pet_adopt/controllers/auth_controller.dart'; // Biblioteca HTTP
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -39,6 +40,8 @@ class _LoginViewState extends State<LoginView> {
 
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
+          final token = data['token'];
+          await AuthController.saveToken(token);
 
           // Exibe mensagem de sucesso e navega para outra tela
           ScaffoldMessenger.of(context).showSnackBar(

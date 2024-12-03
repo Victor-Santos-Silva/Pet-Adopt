@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:pet_adopt/controllers/auth_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CadastroPetView extends StatefulWidget {
   const CadastroPetView({Key? key}) : super(key: key);
@@ -21,57 +23,74 @@ class _CadastroPetViewState extends State<CadastroPetView> {
 
   // Função para enviar os dados para a API
   Future<void> registerPet() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
+  if (_formKey.currentState!.validate()) {
+    setState(() {
+      _isLoading = true;
+    });
 
-      final url = Uri.parse(
-          'https://pet-adopt-dq32j.ondigitalocean.app/pet/create'); // Altere para sua URL
-      final body = jsonEncode({
-        "name": _nameController.text,
-        "color": _colorController.text,
-        "weight": double.tryParse(_weightController.text) ?? 0.0,
-        "age": int.tryParse(_ageController.text) ?? 0,
-        "images": [
-          _imageController.text
-        ], // Adicionando a imagem em formato de lista
-      });
+    final token = await AuthController.getToken();
 
-      try {
-        final response = await http.post(
-          url,
-          headers: {"Content-Type": "application/json"},
-          body: body,
-        );
+    if (token == null || token.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro: Token não encontrado.')),
+      );
+      return;
+    }
 
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body);
+    final url = Uri.parse('https://pet-adopt-dq32j.ondigitalocean.app/pet/create');
+    final body = jsonEncode({
+      "name": _nameController.text,
+      "color": _colorController.text,
+      "weight": double.tryParse(_weightController.text) ?? 0.0,
+      "age": int.tryParse(_ageController.text) ?? 0,
+      "images": [_imageController.text],
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        // Verifica se a resposta contém uma mensagem de sucesso
+        if (data['message'] == 'Pet criado com sucesso') {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Pet registrado com sucesso!'),
-            ),
+            SnackBar(content: Text('Pet registrado com sucesso!')),
           );
           Navigator.pushReplacementNamed(context, '/');
         } else {
-          final error = jsonDecode(response.body);
+          // Caso o "message" não seja o esperado
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content:
-                    Text('Erro: ${error['message'] ?? 'Falha ao registrar'}')),
+            SnackBar(content: Text('Erro: ${data['message'] ?? 'Falha ao registrar'}')),
           );
         }
-      } catch (e) {
+      } else {
+        // Em caso de erro de status diferente de 200
+        final error = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro de conexão: $e')),
+          SnackBar(
+            content: Text('Erro: ${error['message'] ?? 'Falha ao registrar'}'),
+          ),
         );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
       }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro de conexão: $e')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {

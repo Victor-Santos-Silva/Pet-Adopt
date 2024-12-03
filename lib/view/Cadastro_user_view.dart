@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:pet_adopt/controllers/auth_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CadastroUserView extends StatefulWidget {
   const CadastroUserView({super.key});
@@ -46,11 +48,11 @@ class _CadastroUserView extends State<CadastroUserView> {
 
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
-          // Exibe mensagem de sucesso
+          final token = data['token'];
+          await AuthController.saveToken(token);
+
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content:
-                    Text('Usuário registrado com sucesso! ID: ${data['id']}')),
+            SnackBar(content: Text('Usuário registrado com sucesso!')),
           );
           Navigator.pushReplacementNamed(context, '/');
         } else {
@@ -67,6 +69,7 @@ class _CadastroUserView extends State<CadastroUserView> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erro de conexão: $e')),
         );
+        print(e);
       } finally {
         setState(() {
           _isLoading = false;
