@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pet_adopt/controllers/auth_controller.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CadastroUserView extends StatefulWidget {
   const CadastroUserView({super.key});

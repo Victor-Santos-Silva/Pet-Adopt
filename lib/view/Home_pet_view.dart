@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:pet_adopt/models/Pet.dart';
 import 'package:pet_adopt/widgets/Card_widget.dart';
 
-import 'Cadastro_pet_view.dart'; // Certifique-se de que o model está corretamente implementado e importado.
 
 class HomePetView extends StatefulWidget {
   @override
