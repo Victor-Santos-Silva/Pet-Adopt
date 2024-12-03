@@ -62,34 +62,28 @@ class _HomeViewState extends State<HomePetView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Bem-vindo!"),
+        title: Text("Pets Cadastrados"),
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator()) // Mostra o carregamento
-          : pets.isEmpty
+      body: Column(
+        children: [
+          isLoading
               ? Center(
-                  child: Text(
-                    'Nenhum pet encontrado!',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: pets.length,
-                  itemBuilder: (context, index) {
-                    final pet = pets[index];
-                    return Card_widget(pet: pet);
-                  },
-                ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navega para a página de cadastro de pet
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CadastroPetView()),
-          );
-        },
-        child: Icon(Icons.add), // Ícone de "+" para o botão
-        tooltip: 'Cadastrar Pet', // Texto descritivo ao segurar o botão
+                  child: CircularProgressIndicator()) // Mostra o carregamento
+              : pets.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Nenhum pet encontrado!',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: pets.length,
+                      itemBuilder: (context, index) {
+                        final pet = pets[index];
+                        return Card_widget(pet: pet);
+                      },
+                    ),
+        ],
       ),
     );
   }

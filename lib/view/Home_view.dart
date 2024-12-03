@@ -27,34 +27,56 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Bem-vindo!"),
+        title: Text("Bem-vindo"),
       ),
-      body: _controller.isLoading
-          ? Center(child: CircularProgressIndicator()) // Mostra o carregamento
-          : _controller.pets.isEmpty
-              ? Center(
-                  child: Text(
-                    'Nenhum pet encontrado!',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: _controller.pets.length,
-                  itemBuilder: (context, index) {
-                    final pet = _controller.pets[index];
-                    return Card_widget(pet: pet);
-                  },
-                ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navega para a página de cadastro de pet
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CadastroPetView()),
-          );
-        },
-        child: Icon(Icons.add), // Ícone de "+" para o botão
-        tooltip: 'Cadastrar Pet', // Texto descritivo ao segurar o botão
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Exibe o carregamento ou a lista de pets
+          _controller.isLoading
+              ? Center(child: CircularProgressIndicator())
+              : _controller.pets.isEmpty
+                  ? Center(
+                      child: Text(
+                        'Nenhum pet encontrado!',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: _controller.pets.length,
+                        itemBuilder: (context, index) {
+                          final pet = _controller.pets[index];
+                          return Card_widget(pet: pet);
+                        },
+                      ),
+                    ),
+          // Botões abaixo da lista
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePetView()),
+                  );
+                },
+                child: Icon(Icons.pets), // Ícone para "Pets Cadastrados"
+              ),
+              SizedBox(width: 20), // Espaço entre os botões
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CadastroPetView()),
+                  );
+                },
+                child: Icon(Icons.add), // Ícone para "Cadastrar Pet"
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
