@@ -52,29 +52,32 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
           // Botões abaixo da lista
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePetView()),
-                  );
-                },
-                child: Icon(Icons.pets), // Ícone para "Pets Cadastrados"
-              ),
-              SizedBox(width: 20), // Espaço entre os botões
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CadastroPetView()),
-                  );
-                },
-                child: Icon(Icons.add), // Ícone para "Cadastrar Pet"
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePetView()),
+                    );
+                  },
+                  child: Icon(Icons.pets), // Ícone para "Pets Cadastrados"
+                ),
+                SizedBox(width: 20), // Espaço entre os botões
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CadastroPetView()),
+                    );
+                  },
+                  child: Icon(Icons.add), // Ícone para "Cadastrar Pet"
+                ),
+              ],
+            ),
           ),
         ],
       ),
