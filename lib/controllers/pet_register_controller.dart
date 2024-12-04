@@ -27,6 +27,7 @@ class PetRegisterController {
     });
 
     try {
+      // ignore: unused_local_variable
       final response = await http.post(
         url,
         headers: {
@@ -38,5 +39,6 @@ class PetRegisterController {
     } catch (e) {
       return 'Erro de conexão: $e';
     }
+    return null;
   }
 }
