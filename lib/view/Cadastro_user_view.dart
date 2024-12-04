@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:pet_adopt/controllers/auth_controller.dart';
+import 'package:pet_adopt/controllers/user_register_controller.dart';
+import 'package:pet_adopt/widgets/Wallpaper_widget.dart';
 
 class CadastroUserView extends StatefulWidget {
   const CadastroUserView({super.key});
@@ -11,7 +10,6 @@ class CadastroUserView extends StatefulWidget {
 }
 
 class _CadastroUserView extends State<CadastroUserView> {
-  // Controladores para os campos do formulário
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -19,60 +17,36 @@ class _CadastroUserView extends State<CadastroUserView> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  bool _isLoading = false; // Indicador de carregamento
+  final UserRegisterController _controller = UserRegisterController();
+  bool _isLoading = false;
 
-  // Função para enviar os dados para a API
   Future<void> registerUser() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      final url =
-          Uri.parse('https://pet-adopt-dq32j.ondigitalocean.app/user/register');
-      final body = jsonEncode({
-        "name": _nameController.text,
-        "email": _emailController.text,
-        "phone": _phoneController.text,
-        "password": _passwordController.text,
-        "confirmpassword": _confirmPasswordController.text,
+      final errorMessage = await _controller.registerUser(
+        name: _nameController.text,
+        email: _emailController.text,
+        phone: _phoneController.text,
+        password: _passwordController.text,
+        confirmPassword: _confirmPasswordController.text,
+      );
+
+      setState(() {
+        _isLoading = false;
       });
 
-      try {
-        final response = await http.post(
-          url,
-          headers: {"Content-Type": "application/json"},
-          body: body,
-        );
-
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body);
-          final token = data['token'];
-          await AuthController.saveToken(token);
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Usuário registrado com sucesso!')),
-          );
-          Navigator.pushReplacementNamed(context, '/');
-        } else {
-          // Exibe mensagem de erro retornada pela API
-          final error = jsonDecode(response.body);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content:
-                    Text('Erro: ${error['message'] ?? 'Falha ao registrar'}')),
-          );
-        }
-      } catch (e) {
-        // Exibe mensagem de erro genérica
+      if (errorMessage == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro de conexão: $e')),
+          SnackBar(content: Text('Usuário registrado com sucesso!')),
         );
-        print(e);
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
+        Navigator.pushReplacementNamed(context, '/');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro: $errorMessage')),
+        );
       }
     }
   }
@@ -80,97 +54,212 @@ class _CadastroUserView extends State<CadastroUserView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Registro de Usuário'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              // Nome
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(labelText: 'Nome'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira seu nome';
-                  }
-                  return null;
-                },
+      body: Wallpaper(
+        imagePath: 'assets/images/Background 1.png', // Fundo do cadastro
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                // Contorno do texto "Cadastro"
+                Text(
+                  "CADASTRO",
+                  style: TextStyle(
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 5.0
+                      ..color = Colors.black,
+                  ),
+                ),
+                // Texto preenchido
+                Text(
+                  "CADASTRO",
+                  style: TextStyle(
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // Nome
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2),
+                          ),
+                          labelText: 'Nome',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira seu nome';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      // E-mail
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2),
+                          ),
+                          labelText: 'E-mail',
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira seu e-mail';
+                          }
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                            return 'Insira um e-mail válido';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      // Telefone
+                      TextFormField(
+                        controller: _phoneController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2),
+                          ),
+                          labelText: 'Telefone',
+                        ),
+                        keyboardType: TextInputType.phone,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira seu telefone';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      // Senha
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2),
+                          ),
+                          labelText: 'Senha',
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira sua senha';
+                          }
+                          if (value.length < 6) {
+                            return 'A senha deve ter pelo menos 6 caracteres';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      // Confirmar Senha
+                      TextFormField(
+                        controller: _confirmPasswordController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2),
+                          ),
+                          labelText: 'Confirmar Senha',
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, confirme sua senha';
+                          }
+                          if (value != _passwordController.text) {
+                            return 'As senhas não coincidem';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 32),
+                      // Botão de Registro
+                      _isLoading
+                          ? CircularProgressIndicator()
+                          : ElevatedButton(
+                              onPressed: registerUser,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Colors.blue, // Cor de fundo do botão
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 40, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      12), // Bordas arredondadas
+                                ),
+                                elevation: 4, // Elevação para efeito de sombra
+                              ),
+                              child: Text(
+                                'Registrar',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white, // Cor do texto
+                                ),
+                              ),
+                            ),
+                    ],
+                  ),
+                ),
               ),
-              SizedBox(height: 16),
-              // Email
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'E-mail'),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira seu e-mail';
-                  }
-                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'Insira um e-mail válido';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
-              // Telefone
-              TextFormField(
-                controller: _phoneController,
-                decoration: InputDecoration(labelText: 'Telefone'),
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira seu telefone';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
-              // Senha
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Senha'),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, insira sua senha';
-                  }
-                  if (value.length < 6) {
-                    return 'A senha deve ter pelo menos 6 caracteres';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16),
-              // Confirmar Senha
-              TextFormField(
-                controller: _confirmPasswordController,
-                decoration: InputDecoration(labelText: 'Confirmar Senha'),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, confirme sua senha';
-                  }
-                  if (value != _passwordController.text) {
-                    return 'As senhas não coincidem';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 32),
-              // Botão de Registrar
-              _isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : ElevatedButton(
-                      onPressed: registerUser,
-                      child: Text('Registrar'),
-                    ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

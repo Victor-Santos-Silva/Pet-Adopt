@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:pet_adopt/controllers/auth_controller.dart';
+import 'package:pet_adopt/controllers/pet_register_controller.dart';
 
 class CadastroPetView extends StatefulWidget {
   const CadastroPetView({Key? key}) : super(key: key);
@@ -18,84 +16,40 @@ class _CadastroPetViewState extends State<CadastroPetView> {
   final _ageController = TextEditingController();
   final _imageController = TextEditingController();
 
+  final PetRegisterController _controller = PetRegisterController();
   bool _isLoading = false;
 
-  // Função para enviar os dados para a API
   Future<void> registerPet() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      final token = await AuthController.getToken();
+      final errorMessage = await _controller.registerPet(
+        name: _nameController.text,
+        color: _colorController.text,
+        weight: double.tryParse(_weightController.text) ?? 0.0,
+        age: int.tryParse(_ageController.text) ?? 0,
+        images: [_imageController.text],
+      );
 
-      if (token == null || token.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro: Token não encontrado.')),
-        );
-        return;
-      }
-
-      final url =
-          Uri.parse('https://pet-adopt-dq32j.ondigitalocean.app/pet/create');
-      final body = jsonEncode({
-        "name": _nameController.text,
-        "color": _colorController.text,
-        "weight": double.tryParse(_weightController.text) ?? 0.0,
-        "age": int.tryParse(_ageController.text) ?? 0,
-        "images": [_imageController.text],
+      setState(() {
+        _isLoading = false;
       });
 
-      try {
-        final response = await http.post(
-          url,
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
-          },
-          body: body,
-        );
-
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body);
-
-          // Verifica se a resposta contém uma mensagem de sucesso
-          if (data['message'] == 'Pet criado com sucesso') {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Pet registrado com sucesso!')),
-            );
-            // Limpar os campos
-            _nameController.clear();
-            _colorController.clear();
-            _weightController.clear();
-            _ageController.clear();
-            _imageController.clear();
-          } else {
-            // Caso o "message" não seja o esperado
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content:
-                      Text('Erro: ${data['message'] ?? 'Falha ao registrar'}')),
-            );
-          }
-        } else {
-          // Em caso de erro de status diferente de 200
-          final error = jsonDecode(response.body);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content:
-                  Text('Erro: ${error['message'] ?? 'Falha ao registrar'}'),
-            ),
-          );
-        }
-      } catch (e) {
+      if (errorMessage == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro de conexão: $e')),
+          SnackBar(content: Text('Pet registrado com sucesso!')),
         );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
+        _nameController.clear();
+        _colorController.clear();
+        _weightController.clear();
+        _ageController.clear();
+        _imageController.clear();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro: $errorMessage')),
+        );
       }
     }
   }
@@ -112,7 +66,6 @@ class _CadastroPetViewState extends State<CadastroPetView> {
           key: _formKey,
           child: ListView(
             children: [
-              // Nome
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(labelText: 'Nome'),
@@ -124,7 +77,6 @@ class _CadastroPetViewState extends State<CadastroPetView> {
                 },
               ),
               SizedBox(height: 16),
-              // Cor
               TextFormField(
                 controller: _colorController,
                 decoration: InputDecoration(labelText: 'Cor'),
@@ -136,7 +88,6 @@ class _CadastroPetViewState extends State<CadastroPetView> {
                 },
               ),
               SizedBox(height: 16),
-              // Peso
               TextFormField(
                 controller: _weightController,
                 decoration: InputDecoration(labelText: 'Peso (kg)'),
@@ -152,7 +103,6 @@ class _CadastroPetViewState extends State<CadastroPetView> {
                 },
               ),
               SizedBox(height: 16),
-              // Idade
               TextFormField(
                 controller: _ageController,
                 decoration: InputDecoration(labelText: 'Idade (anos)'),
@@ -168,7 +118,6 @@ class _CadastroPetViewState extends State<CadastroPetView> {
                 },
               ),
               SizedBox(height: 16),
-              // Imagem
               TextFormField(
                 controller: _imageController,
                 decoration: InputDecoration(labelText: 'URL da Imagem'),
@@ -180,7 +129,6 @@ class _CadastroPetViewState extends State<CadastroPetView> {
                 },
               ),
               SizedBox(height: 32),
-              // Botão de Registrar
               _isLoading
                   ? Center(child: CircularProgressIndicator())
                   : ElevatedButton(
