@@ -79,7 +79,7 @@ class _HomeViewState extends State<HomePetView> {
                       itemCount: pets.length,
                       itemBuilder: (context, index) {
                         final pet = pets[index];
-                        return Card_widget(pet: pet);
+                        return CardWidget(pet: pet);
                       },
                     ),
         ],

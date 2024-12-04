@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.login, // Define a rota inicial
+      initialRoute: AppRoutes.home, // Define a rota inicial
       routes: AppRoutes.routes,
     );
   }
