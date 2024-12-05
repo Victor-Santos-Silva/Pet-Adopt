@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:pet_adopt/models/Pet.dart';
 import 'package:pet_adopt/view/Cadastro_pet_view.dart';
 import 'package:pet_adopt/widgets/Card_widget.dart';
-import 'package:pet_adopt/widgets/Header_widget.dart';
 import 'package:pet_adopt/widgets/Wallpaper_widget.dart';
 
 class HomePetView extends StatefulWidget {
