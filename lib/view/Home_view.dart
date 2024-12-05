@@ -3,6 +3,7 @@ import 'package:pet_adopt/controllers/home_controller.dart';
 import 'package:pet_adopt/view/Home_pet_view.dart';
 import 'package:pet_adopt/widgets/Card_widget.dart';
 import 'package:pet_adopt/widgets/Wallpaper_widget.dart';
+import '../widgets/Header_widget.dart';
 import 'Cadastro_pet_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -27,14 +28,17 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: AppBar(
-        title: Text("Bem-vindo"),
-      ), */
       body: Wallpaper(
         imagePath: 'assets/images/wallpaper.jpg',
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            HeaderWidget(
+              title: "Bem-vindo!",
+              subtitle: "Gerencie seus pets facilmente.",
+              imagePath: 'assets/images/foto de perfil.png', // Opcional
+            ),
+
             // Exibe o carregamento ou a lista de pets
             _controller.isLoading
                 ? Center(child: CircularProgressIndicator())
