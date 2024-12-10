@@ -56,205 +56,224 @@ class _CadastroPetViewState extends State<CadastroPetView> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: Wallpaper(
-      imagePath: 'assets/images/Background 1.png', // Fundo do cadastro
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              // Contorno do texto "Registro de Pet"
-              Text(
-                "REGISTRO DE PET",
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 5.0
-                    ..color = Colors.black,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Wallpaper(
+        imagePath: 'assets/images/Background 1.png', // Fundo do cadastro
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                // Contorno do texto "Registro de Pet"
+                Text(
+                  "REGISTRO DE PET",
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 5.0
+                      ..color = Colors.black,
+                  ),
                 ),
-              ),
-              // Texto preenchido
-              Text(
-                "REGISTRO DE PET",
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                // Texto preenchido
+                Text(
+                  "REGISTRO DE PET",
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // Nome do pet
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.black, width: 2),
-                        ),
-                        labelText: 'Nome do Pet',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o nome do pet';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    // Cor do pet
-                    TextFormField(
-                      controller: _colorController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.black, width: 2),
-                        ),
-                        labelText: 'Cor',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira a cor do pet';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    // Peso do pet
-                    TextFormField(
-                      controller: _weightController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.black, width: 2),
-                        ),
-                        labelText: 'Peso (kg)',
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o peso do pet';
-                        }
-                        if (double.tryParse(value) == null) {
-                          return 'Insira um valor numérico válido';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    // Idade do pet
-                    TextFormField(
-                      controller: _ageController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.black, width: 2),
-                        ),
-                        labelText: 'Idade (anos)',
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira a idade do pet';
-                        }
-                        if (int.tryParse(value) == null) {
-                          return 'Insira um valor numérico válido';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    // URL da imagem
-                    TextFormField(
-                      controller: _imageController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.black, width: 2),
-                        ),
-                        labelText: 'URL da Imagem',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira a URL da imagem';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 32),
-                    // Botão Registrar Pet
-                    _isLoading
-                        ? CircularProgressIndicator()
-                        : ElevatedButton(
-                            onPressed: registerPet,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 40, vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 4,
-                            ),
-                            child: Text(
-                              'Registrar Pet',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // Nome do pet
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black),
                           ),
-                  ],
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2),
+                          ),
+                          labelText: 'Nome do Pet',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira o nome do pet';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      // Cor do pet
+                      TextFormField(
+                        controller: _colorController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2),
+                          ),
+                          labelText: 'Cor',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira a cor do pet';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      // Peso do pet
+                      TextFormField(
+                        controller: _weightController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2),
+                          ),
+                          labelText: 'Peso (kg)',
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira o peso do pet';
+                          }
+                          if (double.tryParse(value) == null) {
+                            return 'Insira um valor numérico válido';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      // Idade do pet
+                      TextFormField(
+                        controller: _ageController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2),
+                          ),
+                          labelText: 'Idade (anos)',
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira a idade do pet';
+                          }
+                          if (int.tryParse(value) == null) {
+                            return 'Insira um valor numérico válido';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      // URL da imagem
+                      TextFormField(
+                        controller: _imageController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: Colors.black),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2),
+                          ),
+                          labelText: 'URL da Imagem',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor, insira a URL da imagem';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 32),
+                      // Botão Registrar Pet
+                      _isLoading
+                          ? CircularProgressIndicator()
+                          : ElevatedButton(
+                              onPressed: registerPet,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 40, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 4,
+                              ),
+                              child: Text(
+                                'Registrar Pet',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/home');
+                        },
+                        child: Text(
+                          'Home',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }

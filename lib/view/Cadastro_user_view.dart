@@ -254,6 +254,22 @@ class _CadastroUserView extends State<CadastroUserView> {
                                 ),
                               ),
                             ),
+                      SizedBox(height: 16),
+                      // Botão para criar conta
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/');
+                        },
+                        child: Text(
+                          'Entrar',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
