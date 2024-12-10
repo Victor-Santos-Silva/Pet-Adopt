@@ -11,7 +11,12 @@ class PetDescriptionView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: Text(pet.name),
+        title: Text(
+          pet.name,
+          style: TextStyle(
+            color: const Color.fromARGB(255, 255, 255, 255),
+          ),
+        ),
         centerTitle: true,
       ),
       body: Padding(
