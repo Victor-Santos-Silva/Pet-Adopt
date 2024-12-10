@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pet_adopt/controllers/pet_controller.dart';
-import 'package:pet_adopt/middleware/auth_controller.dart';
+import 'package:pet_adopt/controllers/auth_controller.dart';
 import 'package:pet_adopt/models/Pet.dart';
 import 'package:pet_adopt/view/Cadastro_pet_view.dart';
 import 'package:pet_adopt/widgets/Card_widget.dart';

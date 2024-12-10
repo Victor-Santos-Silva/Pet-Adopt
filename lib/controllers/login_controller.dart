@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:pet_adopt/middleware/auth_controller.dart';
+import 'package:pet_adopt/controllers/auth_controller.dart';
 
 class LoginController {
   Future<Map<String, dynamic>> login(String email, String password) async {
