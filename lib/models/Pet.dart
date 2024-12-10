@@ -6,7 +6,8 @@ class Pet {
   final String color;
   final List<String> images;
 
-  Pet({
+  /// Construtor principal com inicialização obrigatória dos campos
+  const Pet({
     required this.id,
     required this.name,
     required this.age,
@@ -15,6 +16,7 @@ class Pet {
     required this.images,
   });
 
+  /// Factory para criar um pet a partir de um JSON
   factory Pet.fromJson(Map<String, dynamic> json) {
     return Pet(
       id: json['_id'] ?? '',
@@ -22,10 +24,15 @@ class Pet {
       age: json['age'] ?? 0,
       weight: (json['weight'] ?? 0).toDouble(),
       color: json['color'] ?? 'Desconhecida',
-      images: (json['images'] as List<dynamic>?)
-              ?.map((image) => image as String)
-              .toList() ??
-          [],
+      images: _parseImages(json['images']),
     );
+  }
+
+  /// Método para mapear e validar a lista de imagens
+  static List<String> _parseImages(dynamic imagesJson) {
+    if (imagesJson is List) {
+      return imagesJson.map((image) => image.toString()).toList();
+    }
+    return [];
   }
 }
