@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:pet_adopt/controllers/pet_controller.dart';
+import 'package:pet_adopt/middleware/auth_controller.dart';
 import 'package:pet_adopt/models/Pet.dart';
 import 'package:pet_adopt/view/Cadastro_pet_view.dart';
 import 'package:pet_adopt/widgets/Card_widget.dart';
@@ -8,53 +8,41 @@ import 'package:pet_adopt/widgets/Wallpaper_widget.dart';
 
 class HomePetView extends StatefulWidget {
   @override
-  State<HomePetView> createState() => _HomeViewState();
+  _HomePetViewState createState() => _HomePetViewState();
 }
 
-class _HomeViewState extends State<HomePetView> {
-  // Lista de pets
+class _HomePetViewState extends State<HomePetView> {
+  final PetController _controller = PetController();
   List<Pet> pets = [];
-  bool isLoading = true; // Indicador de carregamento
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _fetchPets(); // Chama a API ao iniciar a tela
+    _loadUserPets();
   }
 
-  Future<void> _fetchPets() async {
-    const apiUrl = 'https://pet-adopt-dq32j.ondigitalocean.app/pet/mypets';
+  Future<void> _loadUserPets() async {
+    setState(() {
+      isLoading = true;
+    });
 
     try {
-      final response = await http.get(Uri.parse(apiUrl));
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-
-        // Ajuste aqui para acessar a chave correta
-        if (data['pets'] != null && data['pets'] is List) {
-          setState(() {
-            pets = (data['pets'] as List)
-                .map((json) => Pet.fromJson(json))
-                .toList();
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            pets = [];
-            isLoading = false;
-          });
-          print('Erro: Nenhuma lista encontrada na chave "pets".');
-        }
+      final token = await AuthController.getToken(); // Obtém o token armazenado
+      if (token != null) {
+        final userPets = await _controller.fetchUserPets(token);
+        setState(() {
+          pets = userPets;
+        });
       } else {
-        throw Exception(
-            'Erro ao buscar os dados da API: ${response.statusCode}');
+        print('Token não encontrado. Por favor, faça login novamente.');
       }
     } catch (e) {
+      print('Erro ao carregar os pets: $e');
+    } finally {
       setState(() {
         isLoading = false;
       });
-      print('Erro ao carregar pets: $e');
     }
   }
 
@@ -66,7 +54,6 @@ class _HomeViewState extends State<HomePetView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            
             // Exibe o carregamento ou a lista de pets
             isLoading
                 ? Center(child: CircularProgressIndicator())

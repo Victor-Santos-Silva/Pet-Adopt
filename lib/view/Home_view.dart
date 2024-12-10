@@ -39,7 +39,6 @@ class _HomeViewState extends State<HomeView> {
               imagePath: 'assets/images/foto de perfil.png', // Opcional
             ),
 
-            // Exibe o carregamento ou a lista de pets
             _controller.isLoading
                 ? Center(child: CircularProgressIndicator())
                 : _controller.pets.isEmpty
@@ -58,9 +57,10 @@ class _HomeViewState extends State<HomeView> {
                           },
                         ),
                       ),
+
             // Botões abaixo da lista
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
